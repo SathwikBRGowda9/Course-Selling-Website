@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnHub - Online Courses</title>
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Animation Library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style id="app-style">
+    :root {
+      --primary-color: #4f46e5;
+      --secondary-color: #7c3aed;
+      --accent-color: #ec4899;
+      --text-color: #1f2937;
+      --light-text: #f9fafb;
+      --card-bg: #ffffff;
+      --bg-gradient: linear-gradient(135deg, #4f46e5, #7c3aed, #ec4899);
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-color);
+      background-color: #f5f7fa;
+      overflow-x: hidden;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+    }
+
+    .navbar {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .logo {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      background: var(--bg-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      transition: transform 0.3s ease;
+    }
+    
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .course-grid {
+      background: var(--bg-gradient);
+      padding: 4rem 2rem;
+      border-radius: 0 0 3rem 3rem;
+    }
+    
+    .course-card {
+      background-color: var(--card-bg);
+      border-radius: 1rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      height: 100%;
+      transform: translateY(0);
+    }
+    
+    .course-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .course-icon {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin: 0 auto;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: var(--bg-gradient);
+      color: white;
+    }
+    
+    .btn-enroll {
+      background: var(--bg-gradient);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .btn-enroll:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      z-index: -1;
+      transform: translateX(-100%);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-enroll:hover {
+      box-shadow: 0 0 15px var(--primary-color);
+      transform: translateY(-3px);
+    }
+    
+    .btn-enroll:hover:before {
+      transform: translateX(0);
+    }
+    
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+      }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    .auth-modal {
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+    }
+    
+    .auth-container {
+      background-color: white;
+      border-radius: 1rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      width: 100%;
+      max-width: 450px;
+      position: relative;
+    }
+    
+    .form-input {
+      border: 2px solid #e5e7eb;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      padding-left: 3rem;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+      outline: none;
+    }
+    
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus + .input-icon {
+      color: var(--primary-color);
+    }
+    
+    .auth-switch-btn {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .auth-switch-btn:hover {
+      text-decoration: underline;
+    }
+    
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--bg-gradient);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+    }
+    
+    .back-to-top.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Mobile Styles */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 80%;
+      max-width: 300px;
+      height: 100vh;
+      background-color: white;
+      z-index: 100;
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+      padding: 2rem;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+    
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 99;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Animation for page load */
+    .page-enter {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .page-enter-active {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    
+    textarea.form-input {
+      resize: vertical;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar fixed w-full top-0 z-50 px-4 py-3 animate__animated animate__fadeInDown">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="javascript:void(0)" class="logo text-2xl md:text-3xl">LearnHub</a>
+      
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex space-x-8">
+        <a href="javascript:void(0)" class="text-gray-800 hover:text-primary-600 font-medium transition-colors">Home</a>
+        <a href="javascript:void(0)" class="text-gray-800 hover:text-primary-600 font-medium transition-colors">Courses</a>
+        <a href="javascript:void(0)" class="text-gray-800 hover:text-primary-600 font-medium transition-colors">About</a>
+        <a href="javascript:void(0)" class="text-gray-800 hover:text-primary-600 font-medium transition-colors">Contact</a>
+        <button id="login-btn" class="bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 transition-colors">Login</button>
+      </nav>
+      
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" class="md:hidden text-2xl">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </header>
+  
+  <!-- Mobile Menu -->
+  <div class="overlay" id="overlay"></div>
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="flex justify-between items-center mb-8">
+      <span class="text-2xl font-bold">Menu</span>
+      <button id="close-menu-btn" class="text-2xl">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <nav class="flex flex-col space-y-4">
+      <a href="javascript:void(0)" class="text-gray-800 hover:text-primary-600 font-medium transition-colors py-2">Home</a>
+      <a href="javascript:void(0)" class="text-gray-800 hover:text-primary-600 font-medium transition-colors py-2">Courses</a>
+      <a href="javascript:void(0)" class="text-gray-800 hover:text-primary-600 font-medium transition-colors py-2">About</a>
+      <a href="javascript:void(0)" class="text-gray-800 hover:text-primary-600 font-medium transition-colors py-2">Contact</a>
+      <button id="login-mobile-btn" class="bg-indigo-600 text-white px-5 py-3 rounded-md hover:bg-indigo-700 transition-colors mt-4">Login</button>
+    </nav>
+  </div>
+  
+  <!-- Main Content -->
+  <main class="pt-24 pb-16">
+    <!-- Courses Section -->
+    <section class="course-grid page-enter" id="courses-section">
+      <div class="container mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-12">Explore Our Courses</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <!-- JavaScript Course -->
+          <div class="course-card p-6 animate__animated animate__fadeIn" style="animation-delay: 0.1s">
+            <div class="course-icon">
+              <i class="fab fa-js"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-3">JavaScript</h3>
+            <p class="text-gray-600 text-center mb-6">Master modern JavaScript from basics to advanced concepts and build interactive web applications.</p>
+            <div class="text-center">
+              <button class="btn-enroll pulse">Enroll Now</button>
+            </div>
+          </div>
+          
+          <!-- Java Course -->
+          <div class="course-card p-6 animate__animated animate__fadeIn" style="animation-delay: 0.2s">
+            <div class="course-icon">
+              <i class="fab fa-java"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-3">Java</h3>
+            <p class="text-gray-600 text-center mb-6">Learn Java programming from scratch and develop enterprise-level applications with confidence.</p>
+            <div class="text-center">
+              <button class="btn-enroll pulse">Enroll Now</button>
+            </div>
+          </div>
+          
+          <!-- Python Course -->
+          <div class="course-card p-6 animate__animated animate__fadeIn" style="animation-delay: 0.3s">
+            <div class="course-icon">
+              <i class="fab fa-python"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-3">Python</h3>
+            <p class="text-gray-600 text-center mb-6">Explore Python programming for data science, automation, web development, and more.</p>
+            <div class="text-center">
+              <button class="btn-enroll pulse">Enroll Now</button>
+            </div>
+          </div>
+          
+          <!-- Cyber Security Course -->
+          <div class="course-card p-6 animate__animated animate__fadeIn" style="animation-delay: 0.4s">
+            <div class="course-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-3">Cyber Security</h3>
+            <p class="text-gray-600 text-center mb-6">Learn essential skills to protect systems and networks from digital attacks and security breaches.</p>
+            <div class="text-center">
+              <button class="btn-enroll pulse">Enroll Now</button>
+            </div>
+          </div>
+          
+          <!-- Artificial Intelligence Course -->
+          <div class="course-card p-6 animate__animated animate__fadeIn" style="animation-delay: 0.5s">
+            <div class="course-icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-3">Artificial Intelligence</h3>
+            <p class="text-gray-600 text-center mb-6">Discover AI fundamentals and learn to build intelligent systems that can perceive, learn, and act.</p>
+            <div class="text-center">
+              <button class="btn-enroll pulse">Enroll Now</button>
+            </div>
+          </div>
+          
+          <!-- Web Development Course -->
+          <div class="course-card p-6 animate__animated animate__fadeIn" style="animation-delay: 0.6s">
+            <div class="course-icon">
+              <i class="fas fa-code"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-3">Web Development</h3>
+            <p class="text-gray-600 text-center mb-6">Build responsive, dynamic websites using HTML, CSS, JavaScript, and popular frameworks.</p>
+            <div class="text-center">
+              <button class="btn-enroll pulse">Enroll Now</button>
+            </div>
+          </div>
+          
+          <!-- Machine Learning Course -->
+          <div class="course-card p-6 animate__animated animate__fadeIn" style="animation-delay: 0.7s">
+            <div class="course-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-3">Machine Learning</h3>
+            <p class="text-gray-600 text-center mb-6">Dive into ML algorithms, neural networks, and data modeling to solve complex problems.</p>
+            <div class="text-center">
+              <button class="btn-enroll pulse">Enroll Now</button>
+            </div>
+          </div>
+
+          
+          <!-- Machine Learning Course -->
+          <div class="course-card p-6 animate__animated animate__fadeIn" style="animation-delay: 0.7s">
+            <div class="course-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-3">Deep Learning</h3>
+            <p class="text-gray-600 text-center mb-6">Dive into ML algorithms, neural networks, and data modeling to solve complex problems.</p>
+            <div class="text-center">
+              <button class="btn-enroll pulse">Enroll Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- About Section -->
+    <section class="py-16 px-4 page-enter" id="about-section">
+      <div class="container mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">About Learn Code With Tech</h2>
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 animate__animated animate__fadeIn">
+          <p class="text-gray-700 mb-6">
+            At LearnHub, we're dedicated to empowering individuals with the knowledge and skills they need to thrive in the digital world. Our platform offers high-quality, interactive courses designed by industry experts.
+          </p>
+          <p class="text-gray-700 mb-6">
+            Our mission is to make technology education accessible, engaging, and effective for everyone. Whether you're starting your coding journey or advancing your skills, we provide the resources and support you need to succeed.
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+            <div class="text-center">
+              <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-laptop-code text-2xl text-indigo-600"></i>
+              </div>
+              <h3 class="font-bold mb-2">Learn Anywhere</h3>
+              <p class="text-gray-600">Access our courses from any device, anytime, anywhere</p>
+            </div>
+            <div class="text-center">
+              <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-certificate text-2xl text-indigo-600"></i>
+              </div>
+              <h3 class="font-bold mb-2">Get Certified</h3>
+              <p class="text-gray-600">Earn certificates recognized by leading tech companies</p>
+            </div>
+            <div class="text-center">
+              <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-users text-2xl text-indigo-600"></i>
+              </div>
+              <h3 class="font-bold mb-2">Join Community</h3>
+              <p class="text-gray-600">Connect with peers and mentors for support and networking</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section class="py-16 px-4 bg-gray-50 page-enter" id="contact-section">
+      <div class="container mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Contact Us</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div class="bg-white rounded-xl shadow-lg p-8 animate__animated animate__fadeIn">
+            <h3 class="text-xl font-bold mb-4">Get In Touch</h3>
+            <div class="flex items-start mb-6">
+              <i class="fas fa-map-marker-alt text-indigo-600 mr-4 mt-1"></i>
+              <p class="text-gray-700">123 Learning Street, Education City, 12345</p>
+            </div>
+            <div class="flex items-start mb-6">
+              <i class="fas fa-envelope text-indigo-600 mr-4 mt-1"></i>
+              <p class="text-gray-700">support@learnhub.com</p>
+            </div>
+            <div class="flex items-start mb-6">
+              <i class="fas fa-phone text-indigo-600 mr-4 mt-1"></i>
+              <p class="text-gray-700">+1 (555) 123-4567</p>
+            </div>
+            <div class="flex space-x-4 mt-8">
+              <a href="javascript:void(0)" class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white hover:bg-indigo-700 transition-colors">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="javascript:void(0)" class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white hover:bg-indigo-700 transition-colors">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="javascript:void(0)" class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white hover:bg-indigo-700 transition-colors">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+              <a href="javascript:void(0)" class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white hover:bg-indigo-700 transition-colors">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl shadow-lg p-8 animate__animated animate__fadeIn">
+            <h3 class="text-xl font-bold mb-4">Send Us a Message</h3>
+            <form>
+              <div class="mb-4">
+                <input type="text" class="form-input" placeholder="Your Name" required>
+              </div>
+              <div class="mb-4">
+                <input type="email" class="form-input" placeholder="Your Email" required>
+              </div>
+              <div class="mb-4">
+                <textarea class="form-input min-h-[120px]" placeholder="Your Message" required></textarea>
+              </div>
+              <button type="submit" class="btn-enroll w-full">Send Message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Auth Modal -->
+  <div class="auth-modal fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div class="auth-container animate__animated animate__fadeInUp">
+      <!-- Login Form -->
+      <div id="login-form" class="p-8">
+        <h2 class="text-2xl font-bold mb-6 text-center">Login to Your Account</h2>
+        <form>
+          <div class="mb-4 relative">
+            <input type="email" class="form-input" placeholder="Email Address" required>
+            <i class="fas fa-envelope input-icon"></i>
+          </div>
+          <div class="mb-6 relative">
+            <input type="password" class="form-input" placeholder="Password" required>
+            <i class="fas fa-lock input-icon"></i>
+          </div>
+          <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 transition-all mb-4">
+            Login
+          </button>
+          <p class="text-center text-gray-600">
+            Don't have an account? 
+            <button type="button" class="auth-switch-btn" id="show-register">Register</button>
+          </p>
+        </form>
+      </div>
+      
+      <!-- Register Form -->
+      <div id="register-form" class="p-8 hidden">
+        <h2 class="text-2xl font-bold mb-6 text-center">Create an Account</h2>
+        <form>
+          <div class="mb-4 relative">
+            <input type="text" class="form-input" placeholder="Full Name" required>
+            <i class="fas fa-user input-icon"></i>
+          </div>
+          <div class="mb-4 relative">
+            <input type="email" class="form-input" placeholder="Email Address" required>
+            <i class="fas fa-envelope input-icon"></i>
+          </div>
+          <div class="mb-4 relative">
+            <input type="password" class="form-input" placeholder="Password" required>
+            <i class="fas fa-lock input-icon"></i>
+          </div>
+          <div class="mb-6 relative">
+            <input type="password" class="form-input" placeholder="Confirm Password" required>
+            <i class="fas fa-lock input-icon"></i>
+          </div>
+          <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 transition-all mb-4">
+            Register
+          </button>
+          <p class="text-center text-gray-600">
+            Already have an account? 
+            <button type="button" class="auth-switch-btn" id="show-login">Login</button>
+          </p>
+        </form>
+      </div>
+      
+      <!-- Close Button -->
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800" id="close-auth-modal">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+  
+  <script id="app-script">
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elements for page animation
+      const courseSection = document.getElementById('courses-section');
+      const aboutSection = document.getElementById('about-section');
+      const contactSection = document.getElementById('contact-section');
+      
+      // Initialize page animations
+      setTimeout(() => {
+        courseSection.classList.add('page-enter-active');
+      }, 100);
+      
+      setTimeout(() => {
+        aboutSection.classList.add('page-enter-active');
+      }, 300);
+      
+      setTimeout(() => {
+        contactSection.classList.add('page-enter-active');
+      }, 500);
+      
+      // Mobile menu functionality
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const closeMenuBtn = document.getElementById('close-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const overlay = document.getElementById('overlay');
+      
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.add('open');
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+      
+      closeMenuBtn.addEventListener('click', closeMenu);
+      overlay.addEventListener('click', closeMenu);
+      
+      function closeMenu() {
+        mobileMenu.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      
+      // Auth modal functionality
+      const authModal = document.querySelector('.auth-modal');
+      const loginBtn = document.getElementById('login-btn');
+      const loginMobileBtn = document.getElementById('login-mobile-btn');
+      const closeAuthModalBtn = document.getElementById('close-auth-modal');
+      const showRegisterBtn = document.getElementById('show-register');
+      const showLoginBtn = document.getElementById('show-login');
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      
+      loginBtn.addEventListener('click', openAuthModal);
+      loginMobileBtn.addEventListener('click', () => {
+        closeMenu();
+        openAuthModal();
+      });
+      
+      closeAuthModalBtn.addEventListener('click', closeAuthModal);
+      
+      showRegisterBtn.addEventListener('click', () => {
+        loginForm.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+      });
+      
+      showLoginBtn.addEventListener('click', () => {
+        registerForm.classList.add('hidden');
+        loginForm.classList.remove('hidden');
+      });
+      
+      function openAuthModal() {
+        authModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+      
+      function closeAuthModal() {
+        authModal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+      
+      // Close modal if clicked outside of container
+      authModal.addEventListener('click', function(e) {
+        if (e.target === authModal) {
+          closeAuthModal();
+        }
+      });
+      
+      // Back to top button functionality
+      const backToTopBtn = document.getElementById('back-to-top');
+      
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          backToTopBtn.classList.add('show');
+        } else {
+          backToTopBtn.classList.remove('show');
+        }
+      });
+      
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+      
+      // Enroll buttons 
+      const enrollButtons = document.querySelectorAll('.btn-enroll');
+      
+      enrollButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // This would normally connect to an API
+          // For now, we'll just open the login modal if user is not logged in
+          openAuthModal();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
